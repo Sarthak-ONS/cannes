@@ -1,9 +1,9 @@
+import 'package:cannes/Widgets/trending_widget.dart';
+import 'package:cannes/list_main_categories.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import '../Widgets/home_page_card.dart';
-import '../Widgets/something_went_wrong_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -14,11 +14,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  getTrendingCollections() async {
-    final res = await FirebaseFirestore.instance.collection('Trending').get();
-    return res;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +92,6 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(
             height: 35,
           ),
-
           const Padding(
             padding: EdgeInsets.symmetric(vertical: 50.0, horizontal: 10),
             child: Text(
@@ -110,62 +104,35 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 125,
-            child: FutureBuilder(
-              future: getTrendingCollections(),
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                if (snapshot.hasError) {
-                  print(snapshot..error);
-
-                  return const SomethingWentWrong();
-                }
-                if (snapshot.connectionState == ConnectionState.done) {
-                  return ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: snapshot.data.docs.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Container(
-                        padding: const EdgeInsets.all(8.0),
-                        height: 80,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            ClipOval(
-                              child: Image.network(
-                                snapshot.data.docs[index]['imageUrl'],
-                                fit: BoxFit.scaleDown,
-                                height: 70,
-                                width: 70,
-                              ),
-                            ),
-                            Text(
-                              "${snapshot.data.docs[index]['for']}",
-                              style: const TextStyle(
-                                  fontSize: 12, fontWeight: FontWeight.bold),
-                            ),
-                            //${snapshot.data.docs[index]['type']}
-                            Text(
-                              "${snapshot.data.docs[index]['type']}",
-                              style: const TextStyle(fontSize: 13),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  );
-                }
-
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              },
-            ),
+            child: TrendingWidget(),
           ),
           const SizedBox(
             height: 35,
           ),
-          //
+          SizedBox(
+            height: 450,
+            child: ListView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: listMainCategories.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Center(
+                    child: Text(
+                      listMainCategories[index],
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 22,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
         ],
       ),
     );
