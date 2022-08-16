@@ -1,8 +1,9 @@
+import 'package:cannes/Widgets/new_arrival_widget.dart';
 import 'package:cannes/Widgets/trending_widget.dart';
-import 'package:cannes/list_main_categories.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import '../Widgets/age_category_widget.dart';
 import '../Widgets/home_page_card.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -66,8 +67,8 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: ListView(
         padding: const EdgeInsets.only(top: 15, left: 10, right: 10),
-        children: [
-          const Center(
+        children: const [
+          Center(
             child: Text(
               "Free membership for members above 999! Join Now",
               style: TextStyle(
@@ -75,24 +76,24 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          const SizedBox(
+          SizedBox(
             height: 25,
           ),
-          const HomePageCardWidget(
+          HomePageCardWidget(
             image:
                 "https://user-images.githubusercontent.com/57105611/184881934-b14ec179-58d4-46a7-b8cc-7c5dbd37c9cf.jpg",
           ),
-          const HomePageCardWidget(
+          HomePageCardWidget(
             image:
                 "https://images.pexels.com/photos/934070/pexels-photo-934070.jpeg?auto=compress&cs=tinysrgb&w=600",
             heading: "Press : Fresh",
             subHeading: "",
             isTextCenter: true,
           ),
-          const SizedBox(
+          SizedBox(
             height: 35,
           ),
-          const Padding(
+          Padding(
             padding: EdgeInsets.symmetric(vertical: 50.0, horizontal: 10),
             child: Text(
               "Trending Categories",
@@ -104,35 +105,30 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          const SizedBox(
+          SizedBox(
             height: 125,
             child: TrendingWidget(),
           ),
-          const SizedBox(
+          SizedBox(
             height: 35,
           ),
+          AgeCategoryWidget(),
           SizedBox(
-            height: 450,
-            child: ListView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: listMainCategories.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Center(
-                    child: Text(
-                      listMainCategories[index],
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 22,
-                      ),
-                    ),
-                  ),
-                );
-              },
+            height: 35,
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 10),
+            child: Text(
+              "New Arrivals",
+              style: TextStyle(
+                fontWeight: FontWeight.w400,
+                color: Colors.black87,
+                fontSize: 20,
+                fontFamily: 'Poppins',
+              ),
             ),
           ),
+          NewArrival()
         ],
       ),
     );
