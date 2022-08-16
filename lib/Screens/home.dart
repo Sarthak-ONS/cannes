@@ -1,5 +1,4 @@
 import 'package:cannes/Widgets/new_arrival_widget.dart';
-import 'package:cannes/Widgets/trending_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -105,10 +104,10 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          SizedBox(
-            height: 125,
-            child: TrendingWidget(),
-          ),
+          // SizedBox(
+          //   height: 125,
+          //   child: TrendingWidget(),
+          // ),
           SizedBox(
             height: 35,
           ),

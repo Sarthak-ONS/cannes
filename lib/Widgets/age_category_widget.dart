@@ -10,7 +10,7 @@ class AgeCategoryWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 450,
+      height: 465,
       child: ListView.builder(
         physics: const NeverScrollableScrollPhysics(),
         itemCount: listMainCategories.length,
@@ -23,7 +23,7 @@ class AgeCategoryWidget extends StatelessWidget {
                 style: const TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.w400,
-                  fontSize: 22,
+                  fontSize: 25,
                 ),
               ),
             ),

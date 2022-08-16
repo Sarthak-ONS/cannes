@@ -1,3 +1,5 @@
+import 'package:cannes/Widgets/something_went_wrong_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class NewArrival extends StatefulWidget {
@@ -8,14 +10,7 @@ class NewArrival extends StatefulWidget {
 }
 
 class _NewArrivalState extends State<NewArrival> {
-  List newArrivalChips = [
-    "Ladies",
-    "Men",
-    "Divided",
-    "Kids",
-    "Baby",
-    "H&M Home"
-  ];
+  final int _value = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -28,16 +23,72 @@ class _NewArrivalState extends State<NewArrival> {
             height: 50,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: newArrivalChips.length,
+              itemCount: newArrivalConstChips.length,
               itemBuilder: (BuildContext context, int index) {
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: CustomRawChip(
-                    newArrivalChips: newArrivalChips,
                     index: index,
+                    isSelected: newArrivalConstChips[index].isSelected,
+                    onTapCallback: () {
+                      print("Callback called");
+                      for (var item in newArrivalConstChips) {
+                        setState(() {
+                          item.isSelected = false;
+                        });
+                      }
+                      setState(
+                        () {
+                          newArrivalConstChips[index].isSelected = true;
+                        },
+                      );
+                    },
                   ),
                 );
               },
+            ),
+          ),
+          Container(
+            child: FutureBuilder(
+              future: FirebaseFirestore.instance
+                  .collection('Products')
+                  .where("origin_date",
+                      isLessThan: Timestamp.fromDate(DateTime.now()))
+                  .get(),
+              builder: ((BuildContext context, AsyncSnapshot snapshot) {
+                if (snapshot.hasError) {
+                  return const SomethingWentWrong();
+                }
+                if (snapshot.connectionState == ConnectionState.done) {
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: snapshot.data.docs.length + 10,
+                    itemBuilder: ((context, index) {
+                      print(snapshot.data.docs[0]['images'][0]);
+                      return Container(
+                        height: 220,
+                        width: 150,
+                        color: Colors.red,
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 180,
+                              child: Image.network(
+                                snapshot.data.docs[0]['images'][0],
+                              ),
+                            )
+                          ],
+                        ),
+                      );
+                    }),
+                  );
+                }
+
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }),
             ),
           )
         ],
@@ -46,42 +97,52 @@ class _NewArrivalState extends State<NewArrival> {
   }
 }
 
-class CustomRawChip extends StatefulWidget {
-  const CustomRawChip({
-    Key? key,
-    this.index,
-    required this.newArrivalChips,
-  }) : super(key: key);
+List<CustomRawChipModel> newArrivalConstChips = [
+  CustomRawChipModel(title: "Ladies", isSelected: false),
+  CustomRawChipModel(title: "Men", isSelected: false),
+  CustomRawChipModel(title: "Divided", isSelected: false),
+  CustomRawChipModel(title: "Kids", isSelected: false),
+  CustomRawChipModel(title: "Baby", isSelected: false),
+  CustomRawChipModel(title: "H&M Home", isSelected: false),
+];
 
-  final List newArrivalChips;
+class CustomRawChipModel {
+  String? title;
+  bool? isSelected;
+  CustomRawChipModel({this.isSelected, this.title});
+}
+
+class CustomRawChip extends StatefulWidget {
+  const CustomRawChip(
+      {Key? key, this.index, required this.onTapCallback, this.isSelected})
+      : super(key: key);
+
   final int? index;
+  final Function onTapCallback;
+  final bool? isSelected;
 
   @override
   State<CustomRawChip> createState() => _CustomRawChipState();
 }
 
 class _CustomRawChipState extends State<CustomRawChip> {
-  bool isChippedTapped = false;
-
   @override
   Widget build(BuildContext context) {
     return RawChip(
-      side: !isChippedTapped
-          ? const BorderSide(color: Colors.black, width: 0.5)
+      side: !widget.isSelected!
+          ? const BorderSide(color: Colors.black, width: 1)
           : null,
       onPressed: () {
-        setState(() {
-          isChippedTapped = !isChippedTapped;
-        });
+        widget.onTapCallback();
       },
       elevation: 1,
-      backgroundColor: isChippedTapped ? Colors.red : Colors.white,
+      backgroundColor: widget.isSelected! ? Colors.red : Colors.white,
       label: Text(
-        widget.newArrivalChips[widget.index!],
+        newArrivalConstChips[widget.index!].title!,
         style: TextStyle(
           fontSize: 12,
-          fontWeight: FontWeight.w300,
-          color: isChippedTapped ? Colors.white : Colors.black,
+          fontWeight: FontWeight.w400,
+          color: widget.isSelected! ? Colors.white : Colors.black,
         ),
       ),
     );
