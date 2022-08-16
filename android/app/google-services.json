@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1052393172472",
+    "project_id": "cannes-f5bbb",
+    "storage_bucket": "cannes-f5bbb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1052393172472:android:8c40acb8a979d52812ba0d",
+        "android_client_info": {
+          "package_name": "com.sarthak.cannes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1052393172472-a4nd1t15a7crukihufuggg9d4eldetbr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sarthak.cannes",
+            "certificate_hash": "01ee2d42ec83c57dd3eb5c74008a3fe08f8edfc1"
+          }
+        },
+        {
+          "client_id": "1052393172472-uok5jm29e7u2usl7oi0q1b92no61r0sl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAOPyTuLYXC62Ml7atG_WU9f9_AL0vK0Ww"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1052393172472-uok5jm29e7u2usl7oi0q1b92no61r0sl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
