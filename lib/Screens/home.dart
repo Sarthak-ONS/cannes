@@ -1,0 +1,96 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
+import '../Widgets/home_page_card.dart';
+
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      key: _scaffoldKey,
+      drawer: const Drawer(),
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        actions: const [
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Icon(
+              CupertinoIcons.search,
+              color: Colors.black87,
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Icon(
+              CupertinoIcons.person,
+              color: Colors.black87,
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Icon(
+              CupertinoIcons.heart,
+              color: Colors.black87,
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Icon(
+              CupertinoIcons.shopping_cart,
+              color: Colors.black87,
+            ),
+          ),
+        ],
+        leading: IconButton(
+          icon: SvgPicture.asset(
+            "Assets/Images/menu.svg",
+            height: 24,
+            width: 24,
+          ),
+          onPressed: () {
+            _scaffoldKey.currentState!.openDrawer();
+          },
+        ),
+      ),
+      body: ListView(
+        padding: const EdgeInsets.only(top: 15, left: 10, right: 10),
+        children: const [
+          Center(
+            child: Text(
+              "Free membership for members above 999! Join Now",
+              style: TextStyle(
+                fontSize: 12,
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 25,
+          ),
+          HomePageCardWidget(
+            image:
+                "https://user-images.githubusercontent.com/57105611/184881934-b14ec179-58d4-46a7-b8cc-7c5dbd37c9cf.jpg",
+          ),
+          HomePageCardWidget(
+            image:
+                "https://images.pexels.com/photos/934070/pexels-photo-934070.jpeg?auto=compress&cs=tinysrgb&w=600",
+            heading: "Press : Fresh",
+            subHeading: "",
+            isTextCenter: true,
+          ),
+          //
+        ],
+      ),
+    );
+  }
+}
