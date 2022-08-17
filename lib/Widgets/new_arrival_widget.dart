@@ -2,6 +2,7 @@ import 'package:cannes/Widgets/something_went_wrong_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class NewArrival extends StatefulWidget {
   const NewArrival({Key? key}) : super(key: key);
@@ -17,7 +18,10 @@ class _NewArrivalState extends State<NewArrival> {
   Widget build(BuildContext context) {
     return Container(
       height: 350,
-      color: Colors.white,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8.0),
+        color: Colors.white,
+      ),
       child: Column(
         children: [
           SizedBox(
@@ -72,6 +76,10 @@ class _NewArrivalState extends State<NewArrival> {
                       print(snapshot.data.docs[0]['images'][0]);
                       return Container(
                         padding: const EdgeInsets.only(right: 17),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8.0),
+                          color: Colors.transparent,
+                        ),
                         height: 220,
                         width: 150,
                         child: Column(
@@ -79,10 +87,14 @@ class _NewArrivalState extends State<NewArrival> {
                           children: [
                             Stack(
                               children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(8.0),
-                                  child: Image.network(
-                                    snapshot.data.docs[0]['images'][0],
+                                Material(
+                                  color: Colors.transparent,
+                                  elevation: 2.5,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    child: Image.network(
+                                      snapshot.data.docs[0]['images'][0],
+                                    ),
                                   ),
                                 ),
                                 const Positioned(
@@ -91,6 +103,7 @@ class _NewArrivalState extends State<NewArrival> {
                                   child: Icon(
                                     CupertinoIcons.heart_fill,
                                     color: Colors.white,
+                                    size: 30,
                                   ),
                                 )
                               ],
@@ -109,7 +122,9 @@ class _NewArrivalState extends State<NewArrival> {
                             Padding(
                               padding: const EdgeInsets.only(bottom: 5),
                               child: Text(
-                                "Rs. ${snapshot.data.docs[0]['price'].toString()}",
+                                NumberFormat.currency(
+                                        locale: 'en_IN', symbol: '₹ ')
+                                    .format(snapshot.data.docs[0]['price']),
                                 style: const TextStyle(
                                     fontWeight: FontWeight.w300),
                                 textAlign: TextAlign.left,
