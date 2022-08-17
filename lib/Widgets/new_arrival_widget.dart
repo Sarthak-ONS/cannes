@@ -1,5 +1,6 @@
 import 'package:cannes/Widgets/something_went_wrong_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class NewArrival extends StatefulWidget {
@@ -15,7 +16,7 @@ class _NewArrivalState extends State<NewArrival> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 300,
+      height: 350,
       color: Colors.white,
       child: Column(
         children: [
@@ -48,7 +49,10 @@ class _NewArrivalState extends State<NewArrival> {
               },
             ),
           ),
-          Container(
+          const SizedBox(
+            height: 10,
+          ),
+          Expanded(
             child: FutureBuilder(
               future: FirebaseFirestore.instance
                   .collection('Products')
@@ -67,17 +71,50 @@ class _NewArrivalState extends State<NewArrival> {
                     itemBuilder: ((context, index) {
                       print(snapshot.data.docs[0]['images'][0]);
                       return Container(
+                        padding: const EdgeInsets.only(right: 17),
                         height: 220,
                         width: 150,
-                        color: Colors.red,
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(
-                              height: 180,
-                              child: Image.network(
-                                snapshot.data.docs[0]['images'][0],
+                            Stack(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  child: Image.network(
+                                    snapshot.data.docs[0]['images'][0],
+                                  ),
+                                ),
+                                const Positioned(
+                                  bottom: 5,
+                                  right: 5,
+                                  child: Icon(
+                                    CupertinoIcons.heart_fill,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              ],
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 8.0, bottom: 5),
+                              child: Text(
+                                snapshot.data.docs[0]['name'],
+                                maxLines: 2,
+                                textAlign: TextAlign.left,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w500),
                               ),
-                            )
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 5),
+                              child: Text(
+                                "Rs. ${snapshot.data.docs[0]['price'].toString()}",
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w300),
+                                textAlign: TextAlign.left,
+                              ),
+                            ),
                           ],
                         ),
                       );
