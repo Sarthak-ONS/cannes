@@ -7,21 +7,20 @@ class FireStoreApi {
     var x = {
       "origin_date": Timestamp.fromDate(DateTime.now()),
       "images": [
-        "https://user-images.githubusercontent.com/57105611/185140143-5b4cbd88-ee46-467b-9f71-363f73d51574.jpg",
-        "https://user-images.githubusercontent.com/57105611/185140450-8f90af8a-c495-4b7a-aa24-8e5f1a075d39.jpg",
-        "https://user-images.githubusercontent.com/57105611/185140657-c1daab6c-bc94-4944-9f7e-2f4a27767904.jpg",
+        "https://lp2.hm.com/hmgoepprod?set=quality%5B79%5D%2Csource%5B%2Fcc%2F78%2Fcc783b01c22bb9a1f73293e2ac74c6d4c2727298.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BDESCRIPTIVESTILLLIFE%5D%2Cres%5Bm%5D%2Chmver%5B2%5D&call=url[file:/product/main]",
+        "https://lp2.hm.com/hmgoepprod?set=format%5Bwebp%5D%2Cquality%5B79%5D%2Csource%5B%2F5e%2F83%2F5e83ee58dc42378d023e93f13718a65cb1b8c6a8.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BDESCRIPTIVEDETAIL%5D%2Cres%5Bm%5D%2Chmver%5B2%5D&call=url%5Bfile%3A%2Fproduct%2Fmain%5D"
       ],
       "sizes": {"S": 4, "XL": 1, "XS": 6, "L": 3, "M": 4},
-      "price": 1499,
-      "base_text": "Conscious choice",
-      "rating": 4.20,
-      "name": "Ribbed cut-out dress",
+      "price": 799,
+      "base_text": "",
+      "rating": 4.72,
+      "name": "Relaxed Fit Sweatshirt",
       "discount": 0.5,
       "description":
-          "Fitted, calf-length dress in ribbed jersey with a sweetheart neckline and cut-out sections at the front with narrow straps that tie at the back of the neck. Long sleeves and gathered elastication at the front for a draped effect. Unlined",
-      "colors_available": ["#ff0000", "#D82E2F", "#5DA3FA", "#6EC72D"],
+          "Top in sweatshirt fabric made from a cotton blend. Relaxed fit with dropped shoulders and ribbing around the neckline, cuffs and hem. Soft brushed inside.",
+      "colors_available": ["#A020F0", "#D3D3D3", "#FFFFFF", "#918E85 "],
       "p_id": "EspqKGCCWndsANtbVYnk",
-      "tags": ["Ladies", "Clothes", "Hoodies", "Winter", "Sweat Shirt"]
+      "tags": ["Men", "Clothes", "Winter", "Hoodies"]
     };
 
     final docID = await _firebaseFirestore.collection('Products').add(x);
