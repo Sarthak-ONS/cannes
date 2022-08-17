@@ -1,4 +1,6 @@
+import 'package:cannes/Models/review_model_screen_arguements.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -195,6 +197,37 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         ),
                       ),
                     ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 15.0, left: kPadding),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(
+                            context,
+                            '/reviewScreen',
+                            arguments: ReviewPageModelArguements(
+                              pid: snapshot.data.get("p_id"),
+                              userID: "userId To BE Added",
+                              title: snapshot.data.get("name"),
+                            ),
+                          );
+                        },
+                        child: Row(
+                          children: const [
+                            Text(
+                              "Write A Review",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 17,
+                              ),
+                            ),
+                            Icon(
+                              Icons.create,
+                              size: 17,
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
                     const SizedBox(
                       height: 100,
                     ),
@@ -203,7 +236,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           vertical: 10, horizontal: kPadding),
                       padding: const EdgeInsets.symmetric(
                           vertical: 10, horizontal: 10),
-                      color: const Color(0xff5CB270),
+                      color: const Color(0xff5CB270).withOpacity(0.5),
                       child: Column(
                         children: const [
                           Text(
@@ -226,10 +259,65 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     )
                   ],
                 ),
+                Positioned(
+                  top: 30,
+                  left: 10,
+                  child: FloatinCustomIcon(
+                    iconData: Icons.arrow_back,
+                    callBack: () {},
+                  ),
+                ),
+                Positioned(
+                  top: 30,
+                  right: 10,
+                  child: FloatinCustomIcon(
+                    iconData: CupertinoIcons.heart,
+                    callBack: () {},
+                  ),
+                ),
+                Positioned(
+                  top: 70,
+                  right: 10,
+                  child: FloatinCustomIcon(
+                    iconData: CupertinoIcons.cart,
+                    callBack: () {},
+                  ),
+                ),
               ],
             ),
           );
         },
+      ),
+    );
+  }
+}
+
+class FloatinCustomIcon extends StatelessWidget {
+  const FloatinCustomIcon({
+    Key? key,
+    this.iconData,
+    this.callBack,
+  }) : super(key: key);
+
+  final IconData? iconData;
+  final Function? callBack;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipOval(
+      child: GestureDetector(
+        onTap: () {
+          callBack!();
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+          decoration: BoxDecoration(
+              color: Colors.white, borderRadius: BorderRadius.circular(10.0)),
+          child: Icon(
+            iconData!,
+            color: Colors.black54,
+          ),
+        ),
       ),
     );
   }

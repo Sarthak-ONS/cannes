@@ -1,6 +1,8 @@
+import 'package:cannes/Models/review_model_screen_arguements.dart';
 import 'package:cannes/Screens/firebase_init_screen.dart';
 import 'package:cannes/Screens/home.dart';
 import 'package:cannes/Screens/product_details_screen.dart';
+import 'package:cannes/Screens/review_screen.dart';
 import 'package:flutter/material.dart';
 
 class RouteGenerator {
@@ -13,10 +15,14 @@ class RouteGenerator {
         return getMaterialPageRoute(const HomeScreen());
 
       case '/productDetails':
-        print(routeSettings.arguments);
         return getMaterialPageRoute(
             ProductDetailsScreen(pid: routeSettings.arguments.toString()));
-
+      case '/reviewScreen':
+        print(routeSettings.arguments!);
+        ReviewPageModelArguements? args =
+            routeSettings.arguments as ReviewPageModelArguements?;
+        return getMaterialPageRoute(
+            ReviewScreen(reviewPageModelArguements: args));
       default:
         return _errorRoute();
     }
