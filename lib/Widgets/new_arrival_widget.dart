@@ -17,7 +17,7 @@ class _NewArrivalState extends State<NewArrival> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 350,
+      height: 370,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8.0),
         color: Colors.white,
@@ -69,17 +69,16 @@ class _NewArrivalState extends State<NewArrival> {
                 }
                 if (snapshot.connectionState == ConnectionState.done) {
                   return ListView.builder(
-                    shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
-                    itemCount: snapshot.data.docs.length + 10,
+                    itemCount: snapshot.data.docs.length,
                     itemBuilder: ((BuildContext context, int index) {
                       return Container(
-                        padding: const EdgeInsets.only(right: 15),
+                        margin: const EdgeInsets.only(right: 15, bottom: 10),
+                        padding: const EdgeInsets.only(bottom: 8),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8.0),
                           color: Colors.white,
                         ),
-                        height: 220,
                         width: 150,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -92,7 +91,8 @@ class _NewArrivalState extends State<NewArrival> {
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(8.0),
                                     child: Image.network(
-                                      snapshot.data.docs[0]['images'][0],
+                                      snapshot.data.docs[index]['images'][0],
+                                      fit: BoxFit.cover,
                                     ),
                                   ),
                                 ),
@@ -110,7 +110,7 @@ class _NewArrivalState extends State<NewArrival> {
                             Padding(
                               padding: const EdgeInsets.only(top: 2.0),
                               child: Text(
-                                snapshot.data.docs[0]['base_text'],
+                                snapshot.data.docs[index]['base_text'],
                                 maxLines: 2,
                                 textAlign: TextAlign.left,
                                 style: const TextStyle(
@@ -122,22 +122,26 @@ class _NewArrivalState extends State<NewArrival> {
                             ),
                             Padding(
                               padding:
-                                  const EdgeInsets.only(top: 5.0, bottom: 5),
+                                  const EdgeInsets.only(top: 3.0, bottom: 3),
                               child: Text(
-                                snapshot.data.docs[0]['name'],
+                                snapshot.data.docs[index]['name'],
                                 maxLines: 2,
                                 textAlign: TextAlign.left,
                                 style: const TextStyle(
-                                    fontWeight: FontWeight.w500),
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 13,
+                                ),
                               ),
                             ),
                             Text(
                               NumberFormat.currency(
                                 locale: 'en_IN',
                                 symbol: '₹',
-                              ).format(snapshot.data.docs[0]['price']),
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.w300),
+                              ).format(snapshot.data.docs[index]['price']),
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w300,
+                                fontSize: 12,
+                              ),
                               textAlign: TextAlign.left,
                             ),
                           ],

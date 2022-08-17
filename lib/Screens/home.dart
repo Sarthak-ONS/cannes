@@ -130,7 +130,18 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          NewArrival()
+          NewArrival(),
+          HomePageCardWidget(
+            image:
+                "https://user-images.githubusercontent.com/57105611/184881934-b14ec179-58d4-46a7-b8cc-7c5dbd37c9cf.jpg",
+          ),
+          HomePageCardWidget(
+            image:
+                "https://images.pexels.com/photos/934070/pexels-photo-934070.jpeg?auto=compress&cs=tinysrgb&w=600",
+            heading: "Press : Fresh",
+            subHeading: "",
+            isTextCenter: true,
+          ),
         ],
       ),
     );
