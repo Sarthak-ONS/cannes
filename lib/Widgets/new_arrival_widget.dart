@@ -72,13 +72,12 @@ class _NewArrivalState extends State<NewArrival> {
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
                     itemCount: snapshot.data.docs.length + 10,
-                    itemBuilder: ((context, index) {
-                      print(snapshot.data.docs[0]['images'][0]);
+                    itemBuilder: ((BuildContext context, int index) {
                       return Container(
-                        padding: const EdgeInsets.only(right: 17),
+                        padding: const EdgeInsets.only(right: 15),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8.0),
-                          color: Colors.transparent,
+                          color: Colors.white,
                         ),
                         height: 220,
                         width: 150,
@@ -109,8 +108,21 @@ class _NewArrivalState extends State<NewArrival> {
                               ],
                             ),
                             Padding(
+                              padding: const EdgeInsets.only(top: 2.0),
+                              child: Text(
+                                snapshot.data.docs[0]['base_text'],
+                                maxLines: 2,
+                                textAlign: TextAlign.left,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w300,
+                                  color: Colors.black54,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                            Padding(
                               padding:
-                                  const EdgeInsets.only(top: 8.0, bottom: 5),
+                                  const EdgeInsets.only(top: 5.0, bottom: 5),
                               child: Text(
                                 snapshot.data.docs[0]['name'],
                                 maxLines: 2,
@@ -119,16 +131,14 @@ class _NewArrivalState extends State<NewArrival> {
                                     fontWeight: FontWeight.w500),
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 5),
-                              child: Text(
-                                NumberFormat.currency(
-                                        locale: 'en_IN', symbol: '₹ ')
-                                    .format(snapshot.data.docs[0]['price']),
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w300),
-                                textAlign: TextAlign.left,
-                              ),
+                            Text(
+                              NumberFormat.currency(
+                                locale: 'en_IN',
+                                symbol: '₹',
+                              ).format(snapshot.data.docs[0]['price']),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.w300),
+                              textAlign: TextAlign.left,
                             ),
                           ],
                         ),

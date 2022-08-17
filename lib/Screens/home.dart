@@ -1,3 +1,4 @@
+import 'package:cannes/Services/firestore_api.dart';
 import 'package:cannes/Widgets/new_arrival_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -61,7 +62,8 @@ class _HomeScreenState extends State<HomeScreen> {
             width: 24,
           ),
           onPressed: () {
-            _scaffoldKey.currentState!.openDrawer();
+            FireStoreApi().addProductsToDatabase();
+            //_scaffoldKey.currentState!.openDrawer();
           },
         ),
       ),
