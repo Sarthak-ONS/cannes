@@ -1,3 +1,4 @@
+import 'package:cannes/Providers/product_config_provider.dart';
 import 'package:cannes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +17,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => CartProvider()),
+        ChangeNotifierProvider(create: (_) => ProductConfigProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
