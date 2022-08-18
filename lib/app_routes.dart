@@ -18,7 +18,6 @@ class RouteGenerator {
         return getMaterialPageRoute(
             ProductDetailsScreen(pid: routeSettings.arguments.toString()));
       case '/reviewScreen':
-        print(routeSettings.arguments!);
         ReviewPageModelArguements? args =
             routeSettings.arguments as ReviewPageModelArguements?;
         return getMaterialPageRoute(

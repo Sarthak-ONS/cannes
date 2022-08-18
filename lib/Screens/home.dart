@@ -1,8 +1,9 @@
-import 'package:cannes/Services/firestore_api.dart';
+import 'package:cannes/Providers/cart.dart';
 import 'package:cannes/Widgets/new_arrival_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import '../Widgets/age_category_widget.dart';
 import '../Widgets/home_page_card.dart';
 import '../Widgets/trending_widget.dart';
@@ -26,35 +27,62 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
-        actions: const [
-          Padding(
+        actions: [
+          const Padding(
             padding: EdgeInsets.all(8.0),
             child: Icon(
               CupertinoIcons.search,
               color: Colors.black87,
             ),
           ),
-          Padding(
+          const Padding(
             padding: EdgeInsets.all(8.0),
             child: Icon(
               CupertinoIcons.person,
               color: Colors.black87,
             ),
           ),
-          Padding(
+          const Padding(
             padding: EdgeInsets.all(8.0),
             child: Icon(
               CupertinoIcons.heart,
               color: Colors.black87,
             ),
           ),
-          Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Icon(
-              CupertinoIcons.shopping_cart,
-              color: Colors.black87,
-            ),
+          Stack(
+            children: [
+              const Center(
+                child: Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Icon(
+                    CupertinoIcons.shopping_cart,
+                    color: Colors.black87,
+                  ),
+                ),
+              ),
+              Positioned(
+                right: 0,
+                child: CircleAvatar(
+                  backgroundColor: Colors.red,
+                  radius: 10,
+                  child: Text(
+                    Provider.of<CartProvider>(context)
+                        .products!
+                        .length
+                        .toString(),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              )
+            ],
           ),
+          const SizedBox(
+            width: 5,
+          )
         ],
         leading: IconButton(
           icon: SvgPicture.asset(
@@ -63,7 +91,10 @@ class _HomeScreenState extends State<HomeScreen> {
             width: 24,
           ),
           onPressed: () {
-            FireStoreApi().addProductsToDatabase();
+            //
+            print(Provider.of<CartProvider>(context, listen: false)
+                .products!
+                .length);
             //_scaffoldKey.currentState!.openDrawer();
           },
         ),

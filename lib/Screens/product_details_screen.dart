@@ -1,8 +1,14 @@
+import 'package:cannes/Models/cart_product_model.dart';
+import 'package:cannes/Models/product_model.dart';
 import 'package:cannes/Models/review_model_screen_arguements.dart';
+import 'package:cannes/Providers/cart.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+
+import '../Widgets/custom_small_button.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   const ProductDetailsScreen({Key? key, required this.pid}) : super(key: key);
@@ -21,6 +27,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   }
 
   final double kPadding = 15;
+
+  String? selectedSize;
+  String? selectedColor;
 
   @override
   Widget build(BuildContext context) {
@@ -125,27 +134,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     Container(
                       padding: EdgeInsets.only(left: kPadding),
                       margin: const EdgeInsets.symmetric(vertical: 8.0),
-                      height: 60,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: snapshot.data.get("colors_available").length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Container(
-                            margin: const EdgeInsets.only(right: 5, top: 0),
-                            decoration: BoxDecoration(
-                              color: Color(int.parse(snapshot.data
-                                  .get("colors_available")[index])),
-                              border: Border.all(
-                                color: Color(int.parse(snapshot.data
-                                        .get("colors_available")[index]))
-                                    .withOpacity(0.5)
-                                    .withRed(55),
-                              ),
-                            ),
-                            width: 60,
-                          );
-                        },
-                      ),
+                      height: 75,
+                      child: SelectFromColorWidget(
+                          colors: snapshot.data.get("colors_available")),
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: 15.0, left: kPadding),
@@ -161,34 +152,84 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       padding: EdgeInsets.only(left: kPadding),
                       margin: const EdgeInsets.only(top: 5.0),
                       height: 60,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: snapshot.data.get("sizes").length,
-                        itemBuilder: (BuildContext context, int index) {
-                          Map x = snapshot.data.get("sizes");
-                          print(x.keys.toList());
-
-                          return Container(
-                            margin: const EdgeInsets.symmetric(
-                                horizontal: 5, vertical: 8),
-                            child: CircleAvatar(
-                              radius: 22,
-                              backgroundColor: Colors.black38,
-                              child: CircleAvatar(
-                                radius: 20,
-                                backgroundColor: Colors.white,
-                                child: Text(
-                                  x.keys.toList()[index],
-                                  style: const TextStyle(color: Colors.grey),
-                                ),
-                              ),
-                            ),
-                          );
-                        },
+                      child: SelectFromSizeWidget(
+                        sizes: snapshot.data.get('sizes'),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(top: 15.0, left: kPadding),
+                      padding: EdgeInsets.only(left: kPadding, right: kPadding),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              Timestamp or = snapshot.data.get("origin_date");
+                              Provider.of<CartProvider>(context, listen: false)
+                                  .addToProductList(
+                                CartProductModel(
+                                  product: Product(
+                                      name: snapshot.data.get("name"),
+                                      sizes: snapshot.data.get("sizes"),
+                                      description:
+                                          snapshot.data.get("description"),
+                                      pID: snapshot.data.get("p_id"),
+                                      colors:
+                                          snapshot.data.get("colors_available"),
+                                      originDateTime:
+                                          DateTime.fromMicrosecondsSinceEpoch(
+                                              or.microsecondsSinceEpoch),
+                                      price: double.parse(snapshot.data
+                                          .get("price")
+                                          .toString()),
+                                      baseText: snapshot.data.get("base_text"),
+                                      discount: snapshot.data.get("discount"),
+                                      images: snapshot.data.get("images"),
+                                      rating: snapshot.data.get("rating"),
+                                      tags: snapshot.data.get("tags")),
+                                  quantity: 1,
+                                  size: 'S',
+                                ),
+                              );
+                            },
+                            child: const Text(
+                              'Add to Cart',
+                              style: TextStyle(color: Colors.black),
+                            ),
+                            style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all(Colors.white),
+                              shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                  side: const BorderSide(color: Colors.black),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                              ),
+                            ),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {},
+                            child: const Text(
+                              'Buy Now',
+                              style: TextStyle(color: Colors.black),
+                            ),
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(
+                                  Colors.orangeAccent),
+                              shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                  side: const BorderSide(color: Colors.black),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          top: 15.0, left: kPadding, right: kPadding),
                       child: Text(
                         snapshot.data.get("description"),
                         style: const TextStyle(
@@ -264,7 +305,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   left: 10,
                   child: FloatinCustomIcon(
                     iconData: Icons.arrow_back,
-                    callBack: () {},
+                    callBack: () {
+                      Navigator.pop(context);
+                    },
                   ),
                 ),
                 Positioned(
@@ -278,9 +321,34 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 Positioned(
                   top: 70,
                   right: 10,
-                  child: FloatinCustomIcon(
-                    iconData: CupertinoIcons.cart,
-                    callBack: () {},
+                  child: Stack(
+                    children: [
+                      Center(
+                        child: FloatinCustomIcon(
+                          iconData: CupertinoIcons.cart,
+                          callBack: () {},
+                        ),
+                      ),
+                      Positioned(
+                        right: 0,
+                        top: 0,
+                        child: CircleAvatar(
+                          backgroundColor: Colors.red,
+                          radius: 8,
+                          child: Text(
+                            Provider.of<CartProvider>(context)
+                                .products!
+                                .length
+                                .toString(),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 9,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
                   ),
                 ),
               ],
@@ -292,33 +360,101 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   }
 }
 
-class FloatinCustomIcon extends StatelessWidget {
-  const FloatinCustomIcon({
-    Key? key,
-    this.iconData,
-    this.callBack,
-  }) : super(key: key);
+class SelectFromColorWidget extends StatefulWidget {
+  const SelectFromColorWidget({Key? key, required this.colors})
+      : super(key: key);
 
-  final IconData? iconData;
-  final Function? callBack;
+  final List? colors;
+
+  @override
+  State<SelectFromColorWidget> createState() => _SelectFromColorWidgetState();
+}
+
+class _SelectFromColorWidgetState extends State<SelectFromColorWidget> {
+  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    return ClipOval(
-      child: GestureDetector(
-        onTap: () {
-          callBack!();
-        },
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-          decoration: BoxDecoration(
-              color: Colors.white, borderRadius: BorderRadius.circular(10.0)),
-          child: Icon(
-            iconData!,
-            color: Colors.black54,
+    return ListView.builder(
+      scrollDirection: Axis.horizontal,
+      itemCount: widget.colors!.length,
+      itemBuilder: (BuildContext context, int index) {
+        return GestureDetector(
+          onTap: () {
+            print(widget.colors![index]);
+            setState(() {
+              _selectedIndex = index;
+            });
+          },
+          child: Container(
+            padding: const EdgeInsets.only(bottom: 10, right: 0),
+            margin: const EdgeInsets.symmetric(horizontal: 10),
+            decoration: BoxDecoration(
+              border: _selectedIndex == index
+                  ? const Border(
+                      bottom: BorderSide(color: Colors.black, width: 1.5))
+                  : null,
+            ),
+            child: Container(
+              margin: const EdgeInsets.only(right: 5, top: 0),
+              width: 60,
+              decoration: BoxDecoration(
+                color: Color(int.parse(widget.colors![index])),
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
+    );
+  }
+}
+
+class SelectFromSizeWidget extends StatefulWidget {
+  const SelectFromSizeWidget({Key? key, required this.sizes}) : super(key: key);
+
+  final Map sizes;
+
+  @override
+  State<SelectFromSizeWidget> createState() => _SelectFromSizeWidgetState();
+}
+
+class _SelectFromSizeWidgetState extends State<SelectFromSizeWidget> {
+  int _selectedIndex = 0;
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      scrollDirection: Axis.horizontal,
+      itemCount: widget.sizes.length,
+      itemBuilder: (BuildContext context, int index) {
+        Map x = widget.sizes;
+        print(x.keys.toList());
+        return GestureDetector(
+          onTap: () {
+            setState(() {
+              _selectedIndex = index;
+              print(x.keys.toList()[index]);
+            });
+          },
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
+            child: CircleAvatar(
+              radius: 22,
+              backgroundColor:
+                  _selectedIndex == index ? Colors.black : Colors.black38,
+              child: CircleAvatar(
+                radius: 20,
+                backgroundColor: Colors.white,
+                child: Text(
+                  x.keys.toList()[index],
+                  style: TextStyle(
+                      color:
+                          _selectedIndex == index ? Colors.black : Colors.grey),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
