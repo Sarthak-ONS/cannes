@@ -1,4 +1,5 @@
 import 'package:cannes/Models/review_model_screen_arguements.dart';
+import 'package:cannes/Screens/cart_display_screen.dart';
 import 'package:cannes/Screens/firebase_init_screen.dart';
 import 'package:cannes/Screens/home.dart';
 import 'package:cannes/Screens/product_details_screen.dart';
@@ -13,7 +14,8 @@ class RouteGenerator {
 
       case '/home':
         return getMaterialPageRoute(const HomeScreen());
-
+      case '/goToCart':
+        return getMaterialPageRoute(const DisplayCartScreen());
       case '/productDetails':
         return getMaterialPageRoute(
             ProductDetailsScreen(pid: routeSettings.arguments.toString()));

@@ -2,10 +2,15 @@ import 'package:cannes/Models/product_model.dart';
 
 class CartProductModel {
   final Product? product;
-  final Map<String, String>? configurationOfProduct;
+  int? qunatity;
+
+  final String size;
+  final String color;
 
   CartProductModel({
     required this.product,
-    this.configurationOfProduct,
+    required this.color,
+    required this.size,
+    this.qunatity,
   });
 }

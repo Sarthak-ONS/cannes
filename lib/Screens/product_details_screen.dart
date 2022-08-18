@@ -29,9 +29,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
   final double kPadding = 15;
 
-  String? selectedSize;
-  String? selectedColor;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -181,8 +178,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       children: [
                         AddToCartButton(
                           currentProduct: currentProduct,
-                          size: selectedSize,
-                          colorOfChosenSize: selectedColor,
+                          size: Provider.of<ProductConfigProvider>(context)
+                              .selectedSize,
+                          colorOfChosenSize:
+                              Provider.of<ProductConfigProvider>(context)
+                                  .selectedColor,
                         ),
                         ElevatedButton(
                           onPressed: () {
@@ -332,7 +332,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     Center(
                       child: FloatinCustomIcon(
                         iconData: CupertinoIcons.cart,
-                        callBack: () {},
+                        callBack: () {
+                          Navigator.pushNamed(context, '/goToCart');
+                        },
                       ),
                     ),
                     Positioned(
@@ -379,6 +381,19 @@ class _SelectFromColorWidgetState extends State<SelectFromColorWidget> {
   int _selectedIndex = 0;
 
   @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      changeColor(context);
+    });
+  }
+
+  changeColor(context) {
+    Provider.of<ProductConfigProvider>(context, listen: false)
+        .changeColorOfProduct(color: widget.colors![0]);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ListView.builder(
       scrollDirection: Axis.horizontal,
@@ -386,6 +401,8 @@ class _SelectFromColorWidgetState extends State<SelectFromColorWidget> {
       itemBuilder: (BuildContext context, int index) {
         return GestureDetector(
           onTap: () {
+            Provider.of<ProductConfigProvider>(context, listen: false)
+                .changeColorOfProduct(color: widget.colors![index]);
             print(widget.colors![index]);
             setState(() {
               _selectedIndex = index;
@@ -447,18 +464,12 @@ class _SelectFromSizeWidgetState extends State<SelectFromSizeWidget> {
           itemCount: widget.sizes.length,
           itemBuilder: (BuildContext context, int index) {
             Map x = widget.sizes;
-            print(x.containsKey(myvalue.selectedSize));
-
             int _selectedIndex =
                 findInAList(myvalue.selectedSize!, x.keys.toList());
             return GestureDetector(
               onTap: () {
                 Provider.of<ProductConfigProvider>(context, listen: false)
                     .chnageSizeOfProduct(size: x.keys.toList()[index]);
-                // setState(() {
-                //   _selectedIndex = index;
-                //   print(x.keys.toList()[index]);
-                // });
               },
               child: Container(
                 margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
@@ -472,9 +483,10 @@ class _SelectFromSizeWidgetState extends State<SelectFromSizeWidget> {
                     child: Text(
                       x.keys.toList()[index],
                       style: TextStyle(
-                          color: _selectedIndex == index
-                              ? Colors.black
-                              : Colors.grey),
+                        color: _selectedIndex == index
+                            ? Colors.black
+                            : Colors.grey,
+                      ),
                     ),
                   ),
                 ),
@@ -510,18 +522,20 @@ class _AddToCartButtonState extends State<AddToCartButton> {
     // initProviders();
   }
 
+// TODO: To add all defualt value to Size and Color in Add to Cart, Taking null Values
+
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
         Provider.of<CartProvider>(context, listen: false).addToProductList(
-          CartProductModel(
-            product: widget.currentProduct,
-            configurationOfProduct: {
-              widget.size!: widget.colorOfChosenSize!,
-            },
-          ),
-        );
+            CartProductModel(
+              product: widget.currentProduct,
+              size: widget.size!,
+              color: widget.colorOfChosenSize!,
+              qunatity: 1,
+            ),
+            context);
       },
       child: const Text(
         'Add to Cart',
