@@ -36,9 +36,14 @@ class CartProvider extends ChangeNotifier {
   }
 
   calculateTotalPrice() {
+    totalCost = 0;
     for (var i = 0; i < products!.length; i++) {
       totalCost =
           totalCost + (products![i].qunatity! * products![i].product!.price!);
+
+      print(products![i].qunatity!.toString() +
+          "*" +
+          products![i].product!.price!.toString());
     }
     notifyListeners();
   }

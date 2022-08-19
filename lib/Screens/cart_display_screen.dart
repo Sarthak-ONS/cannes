@@ -25,44 +25,48 @@ class _DisplayCartScreenState extends State<DisplayCartScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text(
-          'Cart',
-          style: TextStyle(color: Colors.black),
-        ),
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        titleSpacing: 0,
-        backgroundColor: Colors.white,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Colors.black,
+    return Consumer<CartProvider>(
+      builder: (context, myValue, child) {
+        return Scaffold(
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+            title: const Text(
+              'Cart',
+              style: TextStyle(color: Colors.black),
+            ),
+            elevation: 0,
+            automaticallyImplyLeading: false,
+            titleSpacing: 0,
+            backgroundColor: Colors.white,
+            leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: const Icon(
+                Icons.arrow_back,
+                color: Colors.black,
+              ),
+            ),
           ),
-        ),
-      ),
-      body: NotificationListener<UserScrollNotification>(
-        onNotification: (value) {
-          if (value.direction == ScrollDirection.forward ||
-              value.direction == ScrollDirection.idle) {
-            if (!showPayContainer) {
-              setState(() => showPayContainer = true);
-            }
-          } else if (value.direction == ScrollDirection.reverse) {
-            if (showPayContainer) {
-              setState(() => showPayContainer = false);
-            }
-          }
-          return true;
-        },
-        child: Consumer<CartProvider>(
-          builder: (context, myValue, child) {
-            return Stack(
+          floatingActionButton: FloatingActionButton.extended(
+            onPressed: () {},
+            label: Text('Pay ${myValue.totalCost.toString()}'),
+          ),
+          body: NotificationListener<UserScrollNotification>(
+            onNotification: (value) {
+              if (value.direction == ScrollDirection.forward ||
+                  value.direction == ScrollDirection.idle) {
+                if (!showPayContainer) {
+                  setState(() => showPayContainer = true);
+                }
+              } else if (value.direction == ScrollDirection.reverse) {
+                if (showPayContainer) {
+                  setState(() => showPayContainer = false);
+                }
+              }
+              return true;
+            },
+            child: Stack(
               children: [
                 ListView.builder(
                   physics: const BouncingScrollPhysics(),
@@ -144,30 +148,11 @@ class _DisplayCartScreenState extends State<DisplayCartScreen> {
                     );
                   },
                 ),
-                // Align(
-                //   alignment: Alignment.bottomCenter,
-                //   child: Container(
-                //     decoration: BoxDecoration(
-                //       color: Colors.orangeAccent,
-                //       borderRadius: BorderRadius.circular(10.0),
-                //     ),
-                //     margin: const EdgeInsets.symmetric(
-                //         horizontal: 10, vertical: 15.00),
-                //     padding: const EdgeInsets.symmetric(
-                //         horizontal: 30, vertical: 10),
-                //     width: MediaQuery.of(context).size.width - 15,
-                //     child: Text(
-                //       "Total Payable Amount : ${myValue.totalCost.toString()} \n CheckOut",
-                //       textAlign: TextAlign.center,
-                //       style: const TextStyle(fontSize: 18, color: Colors.white),
-                //     ),
-                //   ),
-                // )
               ],
-            );
-          },
-        ),
-      ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
