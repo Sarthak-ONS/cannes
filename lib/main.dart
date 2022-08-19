@@ -1,3 +1,4 @@
+import 'package:cannes/Providers/cart_screen_ui_provider.dart';
 import 'package:cannes/Providers/product_config_provider.dart';
 import 'package:cannes/app_routes.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => CartProvider()),
         ChangeNotifierProvider(create: (_) => ProductConfigProvider()),
+        ChangeNotifierProvider(create: (_) => CartScreenUIProvider())
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

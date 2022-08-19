@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 class CartProvider extends ChangeNotifier {
   List<CartProductModel>? products = [];
 
-  double? calculatePrice;
+  double totalCost = 0;
 
   addToProductList(CartProductModel cartProduct, BuildContext context) {
     bool isAlreadyPresent = false;
@@ -30,7 +30,16 @@ class CartProvider extends ChangeNotifier {
     if (!isAlreadyPresent) {
       products!.add(cartProduct);
     }
+    calculateTotalPrice();
 
+    notifyListeners();
+  }
+
+  calculateTotalPrice() {
+    for (var i = 0; i < products!.length; i++) {
+      totalCost =
+          totalCost + (products![i].qunatity! * products![i].product!.price!);
+    }
     notifyListeners();
   }
 
