@@ -43,8 +43,15 @@ class CartProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  removeFromProductList(CartProductModel cartProductModel) {
-    products!.remove(cartProductModel);
+  removeFromProductList(CartProductModel cartProduct, BuildContext context) {
+    for (var i = 0; i < products!.length; i++) {
+      if (products![i].product!.pID == cartProduct.product!.pID &&
+          products![i].size == cartProduct.size) {
+        products!.remove(products![i]);
+      }
+    }
+
+    calculateTotalPrice();
     notifyListeners();
   }
 }

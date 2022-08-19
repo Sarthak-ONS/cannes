@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 
+import '../Models/cart_product_model.dart';
+
 class DisplayCartScreen extends StatefulWidget {
   const DisplayCartScreen({Key? key}) : super(key: key);
 
@@ -19,22 +21,7 @@ class _DisplayCartScreenState extends State<DisplayCartScreen> {
     super.initState();
   }
 
-  double increaseHeight = 0;
-
   bool showPayContainer = false;
-
-  getModalbottomSheet() {
-    return showBottomSheet(
-      context: context,
-      builder: (context) => Align(
-        alignment: Alignment.bottomCenter,
-        child: Container(
-          height: 300,
-          color: Colors.red,
-        ),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,18 +48,13 @@ class _DisplayCartScreenState extends State<DisplayCartScreen> {
       ),
       body: NotificationListener<UserScrollNotification>(
         onNotification: (value) {
-          if (value.direction == ScrollDirection.forward) {
+          if (value.direction == ScrollDirection.forward ||
+              value.direction == ScrollDirection.idle) {
             if (!showPayContainer) {
-              for (var i = 0; i < 300; i++) {
-                increaseHeight++;
-              }
               setState(() => showPayContainer = true);
             }
           } else if (value.direction == ScrollDirection.reverse) {
             if (showPayContainer) {
-              for (var i = 0; i < 300; i++) {
-                increaseHeight++;
-              }
               setState(() => showPayContainer = false);
             }
           }
@@ -95,7 +77,6 @@ class _DisplayCartScreenState extends State<DisplayCartScreen> {
                         ),
                       );
                     }
-
                     return Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10.0),
@@ -142,7 +123,17 @@ class _DisplayCartScreenState extends State<DisplayCartScreen> {
                             ],
                           ),
                           IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              print(myValue.products![index].size);
+                              myValue.removeFromProductList(
+                                CartProductModel(
+                                  product: myValue.products![index].product,
+                                  color: myValue.products![index].color,
+                                  size: myValue.products![index].size,
+                                ),
+                                context,
+                              );
+                            },
                             icon: const Icon(
                               CupertinoIcons.delete,
                               color: Colors.redAccent,
@@ -153,17 +144,25 @@ class _DisplayCartScreenState extends State<DisplayCartScreen> {
                     );
                   },
                 ),
-                showPayContainer
-                    ? Align(
-                        alignment: Alignment.bottomCenter,
-                        child: AnimatedContainer(
-                          duration: const Duration(seconds: 3),
-                          curve: Curves.fastOutSlowIn,
-                          height: increaseHeight,
-                          color: Colors.red,
-                        ),
-                      )
-                    : Container()
+                // Align(
+                //   alignment: Alignment.bottomCenter,
+                //   child: Container(
+                //     decoration: BoxDecoration(
+                //       color: Colors.orangeAccent,
+                //       borderRadius: BorderRadius.circular(10.0),
+                //     ),
+                //     margin: const EdgeInsets.symmetric(
+                //         horizontal: 10, vertical: 15.00),
+                //     padding: const EdgeInsets.symmetric(
+                //         horizontal: 30, vertical: 10),
+                //     width: MediaQuery.of(context).size.width - 15,
+                //     child: Text(
+                //       "Total Payable Amount : ${myValue.totalCost.toString()} \n CheckOut",
+                //       textAlign: TextAlign.center,
+                //       style: const TextStyle(fontSize: 18, color: Colors.white),
+                //     ),
+                //   ),
+                // )
               ],
             );
           },
